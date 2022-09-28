@@ -1,0 +1,4 @@
+gpustat
+pyyaml
+requests
+yacs
