@@ -1,0 +1,14 @@
+CLIENT:
+  NAME: '1080'
+  URLS:
+    - PROTOCOL: 'ssh'
+      ADDRESS: 'shenzhuo.vip'
+      PORT: 60022
+    - PROTOCOL: 'rdp'
+      ADDRESS: 'shenzhuo.vip'
+      PORT: 63389
+  INTERVAL: 30
+
+SERVER:
+  ADDRESS: '1.2.3.4'
+  PORT: 4800
