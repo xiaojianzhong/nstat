@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 from collections import OrderedDict
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -45,4 +46,5 @@ if __name__ == '__main__':
         CFG = yaml.load(f, yaml.SafeLoader)
 
     server = HTTPServer((CFG['SERVER']['ADDRESS'], CFG['SERVER']['PORT']), HTTPRequestHandler)
+    logging.info('http server is listening at %s:%s' % server.server_address)
     server.serve_forever()
