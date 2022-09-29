@@ -29,7 +29,7 @@ if __name__ == '__main__':
             'stat': {
                 'gpus': [{
                     'index': gpu['index'],
-                    'uuid': gpu['uuid'],
+                    # 'uuid': gpu['uuid'],
                     'name': gpu['name'],
                     'temperature': gpu['temperature.gpu'],
                     'fan': gpu['fan.speed'],
@@ -42,8 +42,8 @@ if __name__ == '__main__':
                     'processes': [{
                         'username': process['username'],
                         'command': process['full_command'],
-                        'usage': process['gpu_memory_usage'],
-                        'pid': process['pid'],
+                        # 'usage': process['gpu_memory_usage'],
+                        # 'pid': process['pid'],
                     } for process in gpu['processes']],
                 } for gpu in gpu_stat.gpus],
             },
