@@ -22,11 +22,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         content = self.rfile.read(content_length).decode('utf-8')
         body = json.loads(content)
         name = body['name']
-        time = body['time']
         urls = body['urls']
         stat = body['stat']
         name2info[name] = {
-            'time': time,
             'urls': urls,
             'stat': stat,
         }

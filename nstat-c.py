@@ -21,7 +21,6 @@ if __name__ == '__main__':
         gpu_stat.print_formatted()
         body = {
             'name': CFG['CLIENT']['NAME'],
-            'time': gpu_stat.query_time,
             'urls': [{
                 'protocol': URL['PROTOCOL'],
                 'address': URL['ADDRESS'],
