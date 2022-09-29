@@ -41,7 +41,7 @@ if __name__ == '__main__':
                     },
                     'processes': [{
                         'username': process['username'],
-                        'command': process['full_command'],
+                        'command': ' '.join(process['full_command']),
                         # 'usage': process['gpu_memory_usage'],
                         # 'pid': process['pid'],
                     } for process in gpu['processes']],
