@@ -1,4 +1,5 @@
 gpustat
+pyinstaller
 pyyaml
 requests
 yacs
