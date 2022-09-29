@@ -1,4 +1,5 @@
 gpustat
+json2html
 pyinstaller
 pyyaml
 requests
