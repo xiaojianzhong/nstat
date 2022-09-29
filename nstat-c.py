@@ -50,13 +50,16 @@ if __name__ == '__main__':
         }
         content = json.dumps(body).encode('utf-8')
 
-        r = requests.request(
-            method='POST',
-            url='http://%s:%d' % (CFG['SERVER']['ADDRESS'], CFG['SERVER']['PORT']),
-            data=content,
-            headers={
-                'Content-Type': 'application/json',
-            })
-        logging.info(r.status_code)
+        try:
+            r = requests.request(
+                method='POST',
+                url='http://%s:%d' % (CFG['SERVER']['ADDRESS'], CFG['SERVER']['PORT']),
+                data=content,
+                headers={
+                    'Content-Type': 'application/json',
+                })
+            logging.info(r.status_code)
+        except requests.RequestException as e:
+            logging.error(e)
 
         time.sleep(CFG['CLIENT']['INTERVAL'])
