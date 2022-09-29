@@ -7,7 +7,6 @@ import gpustat
 import requests
 import yaml
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('config')
