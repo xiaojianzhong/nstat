@@ -28,4 +28,4 @@ $ python nstat-s.py nstat-s.yaml
 
 ## 原理
 
-<img src="assets/principle.png" width="50%" />
+<img src="assets/principle.png" width="75%" />
