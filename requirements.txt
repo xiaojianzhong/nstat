@@ -3,4 +3,3 @@ json2html
 pyinstaller
 pyyaml
 requests
-yacs
