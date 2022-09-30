@@ -25,3 +25,7 @@ $ python nstat-c.py nstat-c.yaml
 ```shell
 $ python nstat-s.py nstat-s.yaml
 ```
+
+## 原理
+
+<img src="assets/principle.png" width="50%" />
