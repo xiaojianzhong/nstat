@@ -2,6 +2,14 @@
 
 ## 环境要求
 
+- [gpustat](https://github.com/wookayin/gpustat): 查询显卡统计信息，客户端必选
+- [json2html](https://github.com/softvar/json2html): 将 `.json` 数据转换为可视化 `.html` 文本，服务器端必选
+- [pyinstaller](https://pyinstaller.org/): 将 `.py` 文件连同环境打包为可执行文件，可选
+- [pyyaml](https://pyyaml.org/): 读取 `.yaml` 配置文件，必选
+- [requests](https://requests.readthedocs.io/): 发送 HTTP 请求，客户端必选
+
+所有这些 Python 第三方包都可以简单地使用 `pip` 进行安装：
+
 ```shell
 $ pip install -r requirements.txt
 ```
