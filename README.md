@@ -1,5 +1,9 @@
 # nstat
 
+## 原理
+
+<img src="assets/principle.png" width="75%" />
+
 ## 环境要求
 
 - [gpustat](https://github.com/wookayin/gpustat): 查询显卡统计信息，客户端必选
@@ -26,6 +30,9 @@ $ python nstat-c.py nstat-c.yaml
 $ python nstat-s.py nstat-s.yaml
 ```
 
-## 原理
+## 构建
 
-<img src="assets/principle.png" width="75%" />
+```shell
+$ pyinstaller -F nstat-c.py
+$ pyinstaller -F nstat-s.py
+```
