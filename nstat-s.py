@@ -41,7 +41,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                         '风扇转速': gpu['fan'],
                         '使用率': '%d%%' % gpu['utilization'],
                         '功率': '%dW' % gpu['power'],
-                        '内存': '%sMB / %sMB' % (gpu['memory']['used'], gpu['memory']['total']),
+                        '显存': '%.2fG / %.2fG (%.2f%%)' % (gpu['memory']['used'] / 1024, gpu['memory']['total'] / 1024, gpu['memory']['used'] / gpu['memory']['total'] * 100),
                     } for gpu in info['stat']['gpus']],
                 },
                 '统计时间': info['time'].strftime('%Y/%m/%d %H:%M:%S'),
