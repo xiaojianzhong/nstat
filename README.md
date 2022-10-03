@@ -18,17 +18,21 @@
 $ pip install -r requirements.txt
 ```
 
-## 客户端
+## GPU 服务器端
 
 ```shell
 $ python nstat-c.py nstat-c.yaml
 ```
 
-## 服务器端
+其中 `nstat-c.yaml` 为配置文件，需要手动修改，详见模板 [nstat-c.yaml](./nstat-c.yaml)。
+
+## 云服务器端
 
 ```shell
 $ python nstat-s.py nstat-s.yaml
 ```
+
+其中 `nstat-s.yaml` 为配置文件，正常情况下不需要手动修改，详见模板 [nstat-s.yaml](./nstat-s.yaml)。
 
 ## 构建
 
