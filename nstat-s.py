@@ -47,8 +47,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                 },
                 '统计时间': info['time'].strftime('%Y/%m/%d %H:%M:%S'),
             }
-        content = b'<html><meta charset="utf-8" />' + json2html.convert(json=body).encode('utf-8') + b'</html>'
-        self.wfile.write(content)
+        with open('static/index.html') as f:
+            content = (f.read() % json2html.convert(json=body)).encode('utf-8')
+            self.wfile.write(content)
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
