@@ -30,7 +30,8 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             body[name] = {
                 '神卓': [{
                     '协议': url['protocol'],
-                    '地址': '%s:%s' % (url['address'], url['port']),
+                    # '地址': '%s:%s' % (url['address'], url['port']),
+                    '地址': '见群公告',
                     '连通性': '✅' if ping(url['address'], url['port']) else '❌',
                 } for url in info['urls']],
                 '统计信息': {
