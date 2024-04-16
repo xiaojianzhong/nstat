@@ -67,7 +67,9 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
-        content = self.rfile.read(content_length).decode('utf-8')
+        data = self.rfile.read(content_length)
+        content = data.decode('utf-8')
+        print(content)
         body = json.loads(content)
         name = body['name']
         time = datetime.now()

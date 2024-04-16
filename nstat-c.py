@@ -61,13 +61,15 @@ if __name__ == '__main__':
                 'percent': psutil.disk_usage(disk.mountpoint).percent,
             } for disk in psutil.disk_partitions()],
         }
-        content = json.dumps(body).encode('utf-8')
+        content = json.dumps(body, sort_keys=True, indent=2)
+        print(content)
+        data = content.encode('utf-8')
 
         try:
             r = requests.request(
                 method='POST',
                 url='http://%s:%d' % (CFG['SERVER']['ADDRESS'], CFG['SERVER']['PORT']),
-                data=content,
+                data=data,
                 headers={
                     'Content-Type': 'application/json',
                 })
