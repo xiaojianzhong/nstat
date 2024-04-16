@@ -4,8 +4,10 @@ import logging
 import time
 
 import gpustat
+import psutil
 import requests
 import yaml
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -16,36 +18,48 @@ if __name__ == '__main__':
         CFG = yaml.load(f, yaml.SafeLoader)
 
     while True:
-        gpu_stat = gpustat.GPUStatCollection.new_query()
-        gpu_stat.print_formatted()
         body = {
             'name': CFG['CLIENT']['NAME'],
-            'urls': [{
-                'protocol': URL['PROTOCOL'],
-                'address': URL['ADDRESS'],
-                'port': URL['PORT'],
-            } for URL in CFG['CLIENT']['URLS']],
-            'stat': {
-                'gpus': [{
-                    'index': gpu['index'],
-                    # 'uuid': gpu['uuid'],
-                    'name': gpu['name'],
-                    'temperature': gpu['temperature.gpu'],
-                    'fan': gpu['fan.speed'],
-                    'utilization': gpu['utilization.gpu'],
-                    'power': gpu['power.draw'],
-                    'memory': {
-                        'used': gpu['memory.used'],
-                        'total': gpu['memory.total'],
-                    },
-                    'processes': [{
-                        'username': process['username'],
-                        'command': ' '.join(process['full_command']),
-                        # 'usage': process['gpu_memory_usage'],
-                        # 'pid': process['pid'],
-                    } for process in gpu['processes']],
-                } for gpu in gpu_stat.gpus],
+            'users': [{
+                'index': i,
+                'name': user.name,
+            } for i, user in enumerate(psutil.users())],
+            'cpu': {
+                'ncore': psutil.cpu_count(logical=False),
+                'percent': psutil.cpu_percent(),
             },
+            'memory': {
+                'used': psutil.virtual_memory().used,
+                'total': psutil.virtual_memory().total,
+                'percent': psutil.virtual_memory().percent,
+            },
+            'gpus': [{
+                'index': gpu['index'],
+                'name': gpu['name'],
+                'temperature': gpu['temperature.gpu'],
+                'fan': gpu['fan.speed'],
+                'utilization': gpu['utilization.gpu'],
+                'power': gpu['power.draw'],
+                'memory': {
+                    'used': gpu['memory.used'],
+                    'total': gpu['memory.total'],
+                },
+                'processes': [{
+                    'username': process['username'],
+                    'command': ' '.join(process['full_command']),
+                    'usage': process['gpu_memory_usage'],
+                    'pid': process['pid'],
+                } for process in filter(
+                    lambda process: process['gpu_memory_usage'] is not None and process['gpu_memory_usage'] > gpu['memory.total'] * CFG['CLIENT']['PROCESS_GPU_MEMORY_USAGE_THRESHOLD'],
+                    gpu['processes'])],
+            } for gpu in gpustat.GPUStatCollection.new_query().gpus],
+            'disks': [{
+                'name': disk.device,
+                'filesystem': disk.fstype,
+                'used': psutil.disk_usage(disk.mountpoint).used,
+                'total': psutil.disk_usage(disk.mountpoint).total,
+                'percent': psutil.disk_usage(disk.mountpoint).percent,
+            } for disk in psutil.disk_partitions()],
         }
         content = json.dumps(body).encode('utf-8')
 

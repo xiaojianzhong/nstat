@@ -1,7 +1,6 @@
 import argparse
 import json
 import logging
-import socket
 from collections import OrderedDict
 from datetime import datetime
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -9,15 +8,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import yaml
 from json2html import json2html
 
+
 name2info = OrderedDict()
-
-
-def ping(addr, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        try:
-            return sock.connect_ex((addr, port)) == 0
-        except:
-            return False
 
 
 class HTTPRequestHandler(BaseHTTPRequestHandler):
@@ -28,25 +20,46 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         body = dict()
         for name, info in name2info.items():
             body[name] = {
-                '神卓': [{
-                    '协议': url['protocol'],
-                    # '地址': '%s:%s' % (url['address'], url['port']),
-                    '地址': '见群公告',
-                    '连通性': '✅' if ping(url['address'], url['port']) else '❌',
-                } for url in info['urls']],
-                '统计信息': {
-                    'GPU': [{
-                        '序号': gpu['index'],
-                        '名称': gpu['name'],
-                        '温度': '%d°C' % gpu['temperature'],
-                        '风扇转速': '%d%%' % gpu['fan'],
-                        '负载': '%d%%' % gpu['utilization'],
-                        '功率': '%dW' % gpu['power'],
-                        '显存': '%.2fG / %.2fG' % (gpu['memory']['used'] / 1024, gpu['memory']['total'] / 1024),
-                        '显存占用率': '%.2f%%' % (gpu['memory']['used'] / gpu['memory']['total'] * 100),
-                    } for gpu in info['stat']['gpus']],
+                '用户': [{
+                    '序号': user['index'],
+                    '名称': user['name'],
+                } for user in info['users']],
+                'CPU': {
+                    '物理核心数': info['cpu']['ncore'],
+                    '利用率': '%d%%' % info['cpu']['percent'],
                 },
-                '统计时间': info['time'].strftime('%Y/%m/%d %H:%M:%S'),
+                '内存': '%.1fG / %.1fG (%d%%)' % (
+                    info['memory']['used'] / 1024 / 1024 / 1024,
+                    info['memory']['total'] / 1024 / 1024 / 1024,
+                    info['memory']['percent'],
+                ),
+                'GPU': [{
+                    '序号': gpu['index'],
+                    '名称': gpu['name'],
+                    '温度': '%d°C' % gpu['temperature'] if gpu['temperature'] is not None else '?',
+                    '风扇转速': '%d%%' % gpu['fan'] if gpu['fan'] is not None else '?',
+                    '负载': '%d%%' % gpu['utilization'] if gpu['utilization'] is not None else '?',
+                    '功率': '%dW' % gpu['power'] if gpu['power'] is not None else '?',
+                    '显存': '%.1fG / %.1fG (%d%%)' % (
+                        gpu['memory']['used'] / 1024,
+                        gpu['memory']['total'] / 1024,
+                        gpu['memory']['used'] / gpu['memory']['total'] * 100),
+                    '进程': [{
+                        '用户名': process['username'],
+                        '命令': process['command'],
+                        '显存占用量': '%.1fG' % process['usage'] / 1024 if process['usage'] is not None else '?',
+                    } for process in gpu['processes']],
+                } for gpu in info['gpus']],
+                '磁盘': [{
+                    '名称': disk['name'],
+                    '文件系统': disk['filesystem'],
+                    '空间': '%.1fG / %.1fG (%d%%)' % (
+                        disk['used'] / 1024 / 1024 / 1024,
+                        disk['total'] / 1024 / 1024 / 1024,
+                        disk['percent'],
+                    ),
+                } for disk in info['disks']],
+                '更新时间': info['time'].strftime('%Y/%m/%d %H:%M:%S'),
             }
         with open('static/index.html') as f:
             content = (f.read() % json2html.convert(json=body)).encode('utf-8')
@@ -58,12 +71,13 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         body = json.loads(content)
         name = body['name']
         time = datetime.now()
-        urls = body['urls']
-        stat = body['stat']
         name2info[name] = {
+            'users': body['users'],
+            'cpu': body['cpu'],
+            'memory': body['memory'],
+            'gpus': body['gpus'],
+            'disks': body['disks'],
             'time': time,
-            'urls': urls,
-            'stat': stat,
         }
 
         self.send_response(200)

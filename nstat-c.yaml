@@ -1,13 +1,7 @@
 CLIENT:
   NAME: '1080'  # 该 GPU 服务器的唯一标识，不能与其他 GPU 服务器冲突
-  URLS:  # 该 GPU 服务器的神卓连接
-    - PROTOCOL: 'ssh'  # 协议
-      ADDRESS: 'shenzhuo.vip'  # 域名
-      PORT: 60022  # 端口
-    - PROTOCOL: 'rdp'
-      ADDRESS: 'shenzhuo.vip'
-      PORT: 63389
   INTERVAL: 30  # HTTP 心跳间隔
+  PROCESS_GPU_MEMORY_USAGE_THRESHOLD: 0.05  # 仅超过该 GPU 显存阈值的进程才会被上报
 
 SERVER:
   ADDRESS: '1.2.3.4'  # 云服务器的公网 IP 地址
