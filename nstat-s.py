@@ -47,7 +47,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
                     '进程': [{
                         '用户名': process['username'],
                         '命令': process['command'],
-                        '显存占用量': '%.1fG' % process['usage'] / 1024 if process['usage'] is not None else '?',
+                        '显存占用量': '%.1fG' % (process['usage'] / 1024) if process['usage'] is not None else '?',
                     } for process in gpu['processes']],
                 } for gpu in info['gpus']],
                 '磁盘': [{
